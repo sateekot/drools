@@ -1,0 +1,1 @@
+[{"ruleId":"discount-rule-1","quantity":1,"productList":["ProductA","ProductB","ProductC"],"discount":2.0},{"ruleId":"discount-rule-2","quantity":2,"productList":["ProductA","ProductB","ProductC"],"discount":3.0},{"ruleId":"discount-rule-3","quantity":3,"productList":["ProductA","ProductB","ProductC","ProductD","ProductE"],"discount":4.0}]

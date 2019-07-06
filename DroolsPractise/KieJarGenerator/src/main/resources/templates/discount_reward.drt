@@ -1,0 +1,42 @@
+template header
+ruleId
+quantity
+productList
+discount
+
+
+package rules;
+
+dialect  "java"
+import java.util.*;
+import com.sateekot.rules.model.*;
+import java.time.LocalDate;
+global Map<String, UserReward> globalResult;
+function void populateResult(String ruleName, Double discount, Map globalResult) {
+    UserReward result = new UserReward();
+    result.setDiscount(discount);
+    result.setRuleName(ruleName);
+    globalResult.put(ruleName,result);
+}
+function boolean isDateTriggerMatched(String programTriggerDayName) {
+    LocalDate date = LocalDate.now();
+    return date.getDayOfWeek().name().equalsIgnoreCase(programTriggerDayName);
+}
+
+template "Reward Program"
+rule "@{ruleId}"
+    when
+        salesData: SalesData()
+        progCondition1 : Number(intValue >= @{quantity})
+                                from accumulate(item: Item() from salesData.itemList,
+                                init(Integer quantity = 0;),
+                                action(
+                                if("@{productList}".contains(item.getProuctName())) {
+                                    quantity++;
+                                }),
+                                result( new Integer(quantity) )
+                 )
+    then
+        populateResult(drools.getRule().getName(),@{discount}, globalResult);
+end
+end template
